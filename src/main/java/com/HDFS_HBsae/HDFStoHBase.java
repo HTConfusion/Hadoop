@@ -41,10 +41,12 @@ public class HDFStoHBase {
     }
     public static void main(String[] args) throws Exception {
         Configuration config = new Configuration();
+        //获取zookeeper资源
         config.set("hbase.zookeeper.quorum", "master,slave1");
         config.set("hbase.zookeeper.property.clientPort", "2181");
         //置入config
         Job job = Job.getInstance(config);
+        //设定jar包主类
         job.setJarByClass(HDFStoHBase.class);
         job.setMapperClass(ForMapper.class);
         job.setMapOutputKeyClass(LongWritable.class);
@@ -53,7 +55,7 @@ public class HDFStoHBase {
         job.setOutputKeyClass(LongWritable.class);
         job.setOutputValueClass(Put.class);
         //设定hdfs输入
-        FileInputFormat.setInputPaths(job, new Path("hdfs://192.168.44.129:8020/forCL/xwj"));
+        FileInputFormat.setInputPaths(job, new Path("hdfs://master:8020/forCL/xwj"));
         //设定hbase输出
         TableMapReduceUtil.initTableReducerJob("tablename", ForReducer.class, job);
 
